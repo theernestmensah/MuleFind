@@ -18,7 +18,6 @@ import {
   Search,
   ShieldCheck,
   SlidersHorizontal,
-  Sparkles,
   Store,
   X,
 } from "lucide-react";
@@ -195,43 +194,37 @@ function App() {
             </div>
           </div>
 
-          <div className="hero-workbench" aria-label="MuleFinds live browsing preview">
-            <div className="workbench-top">
+          <div className="hero-category-panel" aria-label="MuleBuy category shortcuts">
+            <div className="hero-category-top">
               <span>
-                <Sparkles size={17} />
-                Live hub snapshot
+                <PackageOpen size={17} />
+                MuleBuy categories
               </span>
-              <strong>2026</strong>
+              <strong>{categories.length} lanes</strong>
             </div>
-            <div className="workbench-metrics">
-              {sourceStats.map((stat) => (
-                <div key={stat.label}>
-                  <strong>{stat.value}</strong>
-                  <span>{stat.label}</span>
-                </div>
-              ))}
-            </div>
-            <div className="source-links">
-              {sourceCtas.slice(0, 3).map((cta) => (
-                <a key={cta.label} href={cta.url} target="_blank" rel="nofollow sponsored noopener">
-                  <span>{cta.label}</span>
-                  <ArrowUpRight size={16} />
-                </a>
-              ))}
-            </div>
-            <div className="preview-stack">
-              {categories.slice(0, 4).map((item) => {
+
+            <div className="hero-category-grid">
+              {categories.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <button key={item.name} type="button" onClick={() => {
-                    setCategory(item.name);
-                    scrollTo("products");
-                  }}>
-                    <span style={{ backgroundColor: item.color }}>
-                      <Icon size={18} />
+                  <button
+                    key={item.name}
+                    type="button"
+                    style={{ "--accent": item.color }}
+                    onClick={() => {
+                      setCategory(item.name);
+                      setFavoritesOnly(false);
+                      scrollTo("products");
+                    }}
+                  >
+                    <span className="hero-category-thumb">
+                      <img src={item.image} alt="" loading="lazy" />
+                      <Icon size={15} />
                     </span>
-                    <strong>{item.name}</strong>
-                    <small>{item.count} links</small>
+                    <span className="hero-category-copy">
+                      <strong>{item.name}</strong>
+                      <small>{item.count} links</small>
+                    </span>
                   </button>
                 );
               })}
