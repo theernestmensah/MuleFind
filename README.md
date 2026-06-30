@@ -29,4 +29,4 @@ Push the source files, including `package.json`, `package-lock.json`, `vite.conf
 
 ## Launch notes
 
-Replace source/referral URLs before launch if you want traffic and attribution to use your own accounts. Product prices are shown in Ghana cedis (`GH₵`) using the exchange-rate note stored in `src/mulebuySnapshot.json`. The footer credits Nhyira and Ernest as requested.
+The registration CTA uses `https://mulebuy.com/register?ref=201370869`, and MuleBuy product links use `ref=201370869`. Product prices are shown in Ghana cedis (`GH₵`) using the exchange-rate note stored in `src/mulebuySnapshot.json`. The footer credits Nhyira and Ernest as requested.

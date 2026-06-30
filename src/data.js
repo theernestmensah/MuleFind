@@ -53,7 +53,7 @@ export const sourceCtas = [
   },
   {
     label: "Register & Save",
-    url: "https://mulebuy.com/register?ref=200075996",
+    url: "https://mulebuy.com/register?ref=201370869",
     type: "affiliate",
   },
   {

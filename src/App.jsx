@@ -543,12 +543,7 @@ function SiteFooter() {
         </div>
       </div>
       <div className="footer-copy">
-        <p>
-          Credits: Nhyira and Ernest. Built with information from ogmulebuy.com, original layout and wording, and lucide-react icons.
-        </p>
-        <p>
-          Not affiliated with MuleBuy, sellers, marketplaces, logistics providers, or brand owners. External links may be third-party or affiliate links; verify listings before purchasing.
-        </p>
+        <p>Credits: Nhyira and Ernest.</p>
       </div>
     </footer>
   );
