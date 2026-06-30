@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowUpRight,
-  BadgeCheck,
   BookOpenCheck,
   CheckCircle2,
   ChevronDown,
@@ -20,16 +19,17 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
-  Star,
   Store,
   X,
 } from "lucide-react";
 import {
-  agentRows,
   categories,
+  categoryLinks,
+  currencyInfo,
   faqs,
   productPath,
   products,
+  quickLinks,
   sourceCtas,
   sourceStats,
   trustItems,
@@ -41,7 +41,6 @@ const navItems = [
   ["Products", "products"],
   ["Spreadsheet", "spreadsheet"],
   ["Guide", "guide"],
-  ["Agents", "agents"],
   ["FAQ", "faq"],
 ];
 
@@ -58,11 +57,6 @@ function App() {
   const [favoritesOnly, setFavoritesOnly] = useState(false);
   const [favorites, setFavorites] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
-  const currentProduct = useMemo(() => {
-    const match = window.location.pathname.match(/\/products\/([^/]+)\.html$/);
-    if (!match) return null;
-    return products.find((product) => product.slug === match[1]) || null;
-  }, []);
 
   useEffect(() => {
     try {
@@ -82,10 +76,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    document.title = currentProduct
-      ? `${currentProduct.name} | MuleFinds`
-      : "MuleFinds | Premium MuleBuy Spreadsheet Hub";
-  }, [currentProduct]);
+    document.title = "MuleFinds | Premium MuleBuy Spreadsheet Hub";
+  }, []);
 
   const filteredProducts = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -99,18 +91,23 @@ function App() {
   }, [category, favorites, favoritesOnly, query]);
 
   const categoryNames = useMemo(() => ["All", ...categories.map((item) => item.name)], []);
+  const visibleProducts = useMemo(() => filteredProducts.slice(0, 240), [filteredProducts]);
+  const visibleRows = useMemo(() => filteredProducts.slice(0, 500), [filteredProducts]);
+  const activeCategoryLinks = useMemo(() => {
+    if (category === "All") return quickLinks.slice(0, 8);
+    return categoryLinks.filter((link) => link.category === category);
+  }, [category, quickLinks]);
 
   function toggleFavorite(id) {
     setFavorites((current) => (current.includes(id) ? current.filter((item) => item !== id) : [...current, id]));
   }
 
   function downloadCsv() {
-    const headers = ["id", "name", "category", "price", "seller", "badge", "updated", "detailUrl", "sourceUrl"];
+    const headers = ["id", "name", "category", "price", "seller", "updated", "sourceUrl"];
     const rows = [
       headers.join(","),
       ...products.map((product) => {
-        const row = { ...product, detailUrl: productPath(product) };
-        return headers.map((header) => `"${String(row[header] || "").replaceAll('"', '""')}"`).join(",");
+        return headers.map((header) => `"${String(product[header] || "").replaceAll('"', '""')}"`).join(",");
       }),
     ];
     const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8" });
@@ -125,7 +122,7 @@ function App() {
   return (
     <>
       <header className="site-header">
-        <a className="brand" href={currentProduct ? "/" : "#top"} onClick={() => setMenuOpen(false)} aria-label="MuleFinds home">
+        <a className="brand" href="#top" onClick={() => setMenuOpen(false)} aria-label="MuleFinds home">
           <span className="brand-mark">
             <Layers3 size={20} />
           </span>
@@ -143,9 +140,8 @@ function App() {
           {navItems.map(([label, id]) => (
             <a
               key={id}
-              href={currentProduct ? `/#${id}` : `#${id}`}
+              href={`#${id}`}
               onClick={(event) => {
-                if (currentProduct) return;
                 event.preventDefault();
                 setMenuOpen(false);
                 scrollTo(id);
@@ -162,16 +158,6 @@ function App() {
         </a>
       </header>
 
-      {currentProduct ? (
-        <>
-          <main>
-            <ProductDetailPage product={currentProduct} products={products} />
-          </main>
-          <SiteFooter />
-        </>
-      ) : (
-        <>
-
       <main id="top">
         <section className="hero-shell" id="explore">
           <div className="hero-copy">
@@ -181,7 +167,7 @@ function App() {
             </p>
             <h1>MuleBuy links, rebuilt like a serious product desk.</h1>
             <p className="hero-lede">
-              Browse the MuleBuy spreadsheet model with premium category cards, searchable finds, QC guidance, agent comparison, and source links for the official sheet, Discord, registration, and mobile app.
+              Browse a simple MuleBuy spreadsheet with the same core categories from OGMulebuy products: shoes, hoodies, tees, shorts, tracksuits, jackets, sweaters, pants, jerseys, electronics, women, belts, accessories, jewellery, and perfumes.
             </p>
 
             <div className="hero-search" role="search">
@@ -189,7 +175,7 @@ function App() {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search shoes, hoodies, electronics, sellers..."
+                placeholder="Search MuleBuy products, sellers, categories..."
                 aria-label="Search product directory"
               />
               <button type="button" onClick={() => scrollTo("products")}>
@@ -271,7 +257,7 @@ function App() {
             </p>
             <h2>Start with the spreadsheet lanes people actually use.</h2>
             <p>
-              OGMulebuy organizes discovery around direct links, seasonal drops, apparel categories, electronics, accessories, app installs, Reddit, Discord, and link conversion utilities. This version turns those ideas into a more deliberate browsing system.
+              This keeps the site strictly about MuleBuy: category cards, product rows, source spreadsheet shortcuts, direct MuleBuy links, Ghana cedi estimates, and a clear search/filter workflow.
             </p>
           </div>
 
@@ -350,7 +336,8 @@ function App() {
 
           <div className="results-row">
             <span>
-              <strong>{filteredProducts.length}</strong> curated lanes showing
+              <strong>{filteredProducts.length}</strong> MuleBuy rows showing
+              {filteredProducts.length > visibleProducts.length ? `, first ${visibleProducts.length} rendered` : ""}
             </span>
             <button type="button" onClick={downloadCsv}>
               <Download size={17} />
@@ -358,13 +345,24 @@ function App() {
             </button>
           </div>
 
+          <div className="category-shortcuts">
+            {activeCategoryLinks.map((link) => (
+              <a key={`${link.label}-${link.url}`} href={link.url} target="_blank" rel="nofollow sponsored noopener">
+                <img src={link.image} alt="" loading="lazy" />
+                <span>{category === "All" ? "MuleBuy shortcut" : `${category} shortcut`}</span>
+                <strong>{link.label}</strong>
+                <ArrowUpRight size={17} />
+              </a>
+            ))}
+          </div>
+
           <div className="product-grid">
-            {filteredProducts.map((product) => {
+            {visibleProducts.map((product) => {
               const saved = favorites.includes(product.id);
               return (
                 <article className="product-card" key={product.id}>
                   <div className="product-image">
-                    <a href={productPath(product)} aria-label={`View ${product.name}`}>
+                    <a href={product.sourceUrl} target="_blank" rel="nofollow sponsored noopener" aria-label={`Open ${product.name} on MuleBuy`}>
                       <img src={product.image} alt={product.name} loading="lazy" />
                     </a>
                     <span>{product.badge}</span>
@@ -395,8 +393,8 @@ function App() {
                         <dd>{product.price}</dd>
                       </div>
                     </dl>
-                    <a className="product-link" href={productPath(product)}>
-                      View details
+                    <a className="product-link" href={productPath(product)} target="_blank" rel="nofollow sponsored noopener">
+                      Open MuleBuy
                       <ExternalLink size={16} />
                     </a>
                   </div>
@@ -429,7 +427,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
+                {visibleRows.map((product) => (
                   <tr key={product.id}>
                     <td>{product.id}</td>
                     <td>
@@ -441,7 +439,7 @@ function App() {
                     <td>{product.seller}</td>
                     <td>{product.updated}</td>
                     <td>
-                      <a href={productPath(product)} aria-label={`Open ${product.name}`}>
+                      <a href={product.sourceUrl} target="_blank" rel="nofollow sponsored noopener" aria-label={`Open ${product.name}`}>
                         <ExternalLink size={17} />
                       </a>
                     </td>
@@ -450,6 +448,9 @@ function App() {
               </tbody>
             </table>
           </div>
+          <p className="table-note">
+            Showing {visibleRows.length.toLocaleString("en-GH")} of {filteredProducts.length.toLocaleString("en-GH")} rows. Use search or a category filter to narrow the spreadsheet. Prices are converted with {currencyInfo.source}.
+          </p>
         </section>
 
         <section className="section-shell guide-section" id="guide">
@@ -460,7 +461,7 @@ function App() {
             </p>
             <h2>From spreadsheet link to shipped parcel, without mystery steps.</h2>
             <p>
-              MuleBuy works as a shopping-agent flow: paste product links, submit orders, wait for warehouse arrival, inspect QC photos, consolidate items, choose shipping, and track the parcel after final payment.
+              MuleBuy works as a spreadsheet-to-parcel flow: open product rows, submit orders, wait for warehouse arrival, inspect QC photos, consolidate items, choose shipping, and track the parcel after final payment.
             </p>
             <div className="trust-row">
               {trustItems.map((item) => {
@@ -487,26 +488,6 @@ function App() {
                 </article>
               );
             })}
-          </div>
-        </section>
-
-        <section className="section-shell agents-section" id="agents">
-          <div className="section-heading compact">
-            <p className="eyebrow">
-              <Star size={16} />
-              Agent comparison
-            </p>
-            <h2>Know what each agent is good for before you move links around.</h2>
-          </div>
-
-          <div className="agent-grid">
-            {agentRows.map(([agent, bestFor, strength]) => (
-              <article key={agent}>
-                <span>{agent}</span>
-                <strong>{bestFor}</strong>
-                <p>{strength}</p>
-              </article>
-            ))}
           </div>
         </section>
 
@@ -551,116 +532,8 @@ function App() {
         </section>
       </main>
 
-          <SiteFooter />
-        </>
-      )}
+      <SiteFooter />
     </>
-  );
-}
-
-function ProductDetailPage({ product, products }) {
-  const related = products
-    .filter((item) => item.id !== product.id && item.category === product.category)
-    .concat(products.filter((item) => item.id !== product.id && item.category !== product.category))
-    .slice(0, 3);
-
-  return (
-    <article className="product-detail-page">
-      <div className="product-detail-hero">
-        <div className="detail-copy">
-          <a className="back-link" href="/#products">
-            <MoveRight size={17} />
-            Back to all products
-          </a>
-          <p className="eyebrow">
-            <BadgeCheck size={16} />
-            {product.category} product page
-          </p>
-          <h1>{product.name}</h1>
-          <p className="hero-lede">{product.summary}</p>
-
-          <div className="detail-actions">
-            <a className="btn primary" href={product.sourceUrl} target="_blank" rel="nofollow sponsored noopener">
-              Open source lane
-              <ArrowUpRight size={18} />
-            </a>
-            <a className="btn secondary" href="/#guide">
-              Review QC guide
-              <BookOpenCheck size={18} />
-            </a>
-          </div>
-        </div>
-
-        <div className="detail-panel">
-          <div>
-            <span>Price</span>
-            <strong>{product.price}</strong>
-          </div>
-          <div>
-            <span>Seller source</span>
-            <strong>{product.seller}</strong>
-          </div>
-          <div>
-            <span>Updated</span>
-            <strong>{product.updated}</strong>
-          </div>
-          <div>
-            <span>Directory ID</span>
-            <strong>{product.id}</strong>
-          </div>
-        </div>
-      </div>
-
-      <section className="product-gallery" aria-label={`${product.name} pictures`}>
-        {product.gallery.map((image, index) => (
-          <figure key={image}>
-            <img src={image} alt={`${product.name} picture ${index + 1}`} />
-            <figcaption>{index === 0 ? "Primary listing image" : `Gallery image ${index + 1}`}</figcaption>
-          </figure>
-        ))}
-      </section>
-
-      <section className="detail-info-grid">
-        <div>
-          <p className="eyebrow">
-            <ShieldCheck size={16} />
-            Buying notes
-          </p>
-          <h2>Check the link, then inspect the warehouse photos.</h2>
-          <p>
-            This page is a focused product lane for Ghana-priced browsing. Use the source link to continue into the original listing group, then confirm size, color, seller notes, and QC photos before shipping.
-          </p>
-        </div>
-        <div className="detail-checklist">
-          {["Confirm item options", "Check sizing notes", "Review QC photos", "Estimate shipping in GH₵"].map((item) => (
-            <span key={item}>
-              <CheckCircle2 size={17} />
-              {item}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <section className="related-products">
-        <div className="section-heading compact">
-          <p className="eyebrow">
-            <PackageOpen size={16} />
-            More product pages
-          </p>
-          <h2>Keep browsing separate product pages.</h2>
-        </div>
-        <div className="related-grid">
-          {related.map((item) => (
-            <a key={item.id} href={productPath(item)}>
-              <img src={item.image} alt="" loading="lazy" />
-              <span>{item.category}</span>
-              <strong>{item.name}</strong>
-              <small>{item.price}</small>
-            </a>
-          ))}
-        </div>
-      </section>
-    </article>
   );
 }
 
@@ -681,7 +554,7 @@ function SiteFooter() {
           Credits: Nhyira and Ernest. Built with information from ogmulebuy.com, original layout and wording, and lucide-react icons.
         </p>
         <p>
-          Not affiliated with MuleBuy, Taobao, Weidian, 1688, Tmall, sellers, agents, or brand owners. External links may be third-party or affiliate links; verify listings before purchasing.
+          Not affiliated with MuleBuy, sellers, marketplaces, logistics providers, or brand owners. External links may be third-party or affiliate links; verify listings before purchasing.
         </p>
       </div>
     </footer>

@@ -1,6 +1,6 @@
-# MuleFinds Premium Site
+# MuleFinds MuleBuy Spreadsheet
 
-React/Vite rebuild of the MuleBuy spreadsheet directory. The content model uses public information from `https://ogmulebuy.com/`: 10,000 product links, 30 sellers, daily updates, official spreadsheet CTA, Discord/community CTA, registration CTA, Android app CTA, category-led browsing, product lanes, QC guidance, agent comparison, FAQ structure, and the public OGMulebuy category/card image URLs.
+React/Vite rebuild of the OGMulebuy products directory as a clean MuleBuy spreadsheet site. The local snapshot is based on `https://ogmulebuy.com/products.html` and its public config data: 3,593 MuleBuy product rows, 16 category lanes, category spreadsheet shortcuts, direct MuleBuy product links, OGMulebuy-used product/category images, QC guidance, CSV export, and Ghana cedi pricing.
 
 ## Run locally
 
@@ -17,12 +17,16 @@ npm run build
 
 ## Main files
 
-- `src/App.jsx` - React interface and interactions
-- `src/data.js` - category, product, product page, FAQ, CTA, and guide data
+- `src/App.jsx` - React interface, search, category filters, spreadsheet table, CSV export, and footer credits
+- `src/data.js` - maps the OGMulebuy snapshot into category cards, CTAs, guide copy, and FAQ content
+- `src/mulebuySnapshot.json` - local MuleBuy product/category snapshot from OGMulebuy
 - `src/styles.css` - responsive visual system
-- `products.html`, `guide.html`, `agents.html`, `faq.html`, `spreadsheet.html`, `mulebuy-spreadsheet.html` - legacy redirects into the React app
-- `products/*.html` - individual product detail pages with gallery pictures and Ghana cedi pricing
+- `products.html`, `guide.html`, `faq.html`, `spreadsheet.html`, `mulebuy-spreadsheet.html` - legacy entry pages into the React app
+
+## GitHub
+
+Push the source files, including `package.json`, `package-lock.json`, `vite.config.js`, the HTML files, `src/`, and this README. Do not push `node_modules/` or `dist/`; they are generated locally.
 
 ## Launch notes
 
-Replace source/referral URLs in `src/data.js` before launch if you want traffic and attribution to use your own accounts. Product prices are displayed in Ghana cedis (`GH₵`). The footer credits Nhyira and Ernest as requested.
+Replace source/referral URLs before launch if you want traffic and attribution to use your own accounts. Product prices are shown in Ghana cedis (`GH₵`) using the exchange-rate note stored in `src/mulebuySnapshot.json`. The footer credits Nhyira and Ernest as requested.

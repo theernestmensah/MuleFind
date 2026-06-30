@@ -17,12 +17,32 @@ import {
   Truck,
   WalletCards,
 } from "lucide-react";
+import snapshot from "./mulebuySnapshot.json";
+
+const categoryMeta = {
+  Shoes: { icon: ShoppingBag, color: "#d94f35" },
+  Hoodies: { icon: Sparkles, color: "#7a5c23" },
+  "T-Shirts": { icon: Shirt, color: "#0f8b8d" },
+  Shorts: { icon: Tags, color: "#6d6f12" },
+  Tracksuits: { icon: Boxes, color: "#255c99" },
+  "Coats / Jackets": { icon: PackageCheck, color: "#793f5c" },
+  Sweaters: { icon: Sparkles, color: "#6d6f12" },
+  Pants: { icon: Store, color: "#47624f" },
+  Jersey: { icon: Star, color: "#b96a28" },
+  Electronics: { icon: Headphones, color: "#53599a" },
+  Women: { icon: BadgeCheck, color: "#aa405f" },
+  Belts: { icon: Tags, color: "#7a5c23" },
+  Accessories: { icon: Gem, color: "#8a4b6e" },
+  Jewellery: { icon: Gem, color: "#53599a" },
+  Perfumes: { icon: ScanSearch, color: "#846c3d" },
+  Other: { icon: Boxes, color: "#47624f" },
+};
 
 export const sourceStats = [
-  { label: "Product links", value: "10K+", detail: "from the OGMulebuy hub" },
-  { label: "Seller pool", value: "30", detail: "organized for comparison" },
-  { label: "Browse lanes", value: "23", detail: "category and utility cards" },
-  { label: "Update rhythm", value: "Daily", detail: "built for fresh finds" },
+  { label: "MuleBuy rows", value: snapshot.products.length.toLocaleString("en-GH"), detail: "local spreadsheet snapshot" },
+  { label: "Categories", value: snapshot.categories.length.toLocaleString("en-GH"), detail: "from OGMulebuy products" },
+  { label: "Shortcut sheets", value: snapshot.categoryLinks.length.toLocaleString("en-GH"), detail: "category spreadsheet cards" },
+  { label: "Currency", value: "GH\u20b5", detail: `Ghana cedi estimates at ${snapshot.currency.usdToGhs}` },
 ];
 
 export const sourceCtas = [
@@ -48,332 +68,65 @@ export const sourceCtas = [
   },
 ];
 
-export const ogmulebuyImages = {
-  directLinks: "https://rnimages.xyz/upload/2026/01/05/20260105103743-6e97a15e.jpg",
-  summerSale: "https://rnimages.xyz/upload/2026/06/16/20260616105827-4375ee1f.jpg",
-  tshirts: "https://rnimages.xyz/upload/2026/03/08/20260308140517-0a71b6aa.jpg",
-  hoodies: "https://rnimages.xyz/upload/2026/03/08/20260308134010-6615cf9d.jpg",
-  shorts: "https://rnimages.xyz/upload/2026/04/16/20260416192608-f00419f2.jpg",
-  shoes: "https://rnimages.xyz/upload/2026/03/08/20260308135106-524e1226.jpg",
-  androidApp: "https://rnimages.xyz/upload/2026/05/14/20260514152346-28538150.jpg",
-  tracksuits: "https://rnimages.xyz/upload/2026/03/08/20260308133750-2dcca381.jpg",
-  coats: "https://rnimages.xyz/upload/2025/12/10/20251210143042-a2a39851.png",
-  sweaters: "https://rnimages.xyz/upload/2026/03/08/20260308134457-29d47756.jpg",
-  pants: "https://rnimages.xyz/upload/2025/12/10/20251210161237-c7c11154.png",
-  jersey: "https://rnimages.xyz/upload/2025/09/29/20250929215817-2f97ea21.png",
-  electronics: "https://rnimages.xyz/upload/2025/09/19/20250919120651-171429c8.png",
-  women: "https://rnimages.xyz/_data/i/upload/2025/12/15/20251215115259-f5882c00-xs.png",
-  other: "https://rnimages.xyz/i.php?/upload/2025/09/19/20250919191700-c25bcd7f-xs.png",
-  belts: "https://rnimages.xyz/upload/2026/03/08/20260308141559-27240aa3.jpg",
-  accessories: "https://rnimages.xyz/upload/2026/01/15/20260115065256-d0dceadb.jpg",
-  perfume: "https://rnimages.xyz/upload/2026/03/08/20260308142102-2c1c6897.jpg",
-  reddit: "https://rnimages.xyz/upload/2025/12/05/20251205090138-c690e3ed.webp",
-  converter: "https://upload.wikimedia.org/wikipedia/commons/8/87/Google_Chrome_icon_%282011%29.png",
-  mobileSheet: "https://rnimages.xyz/upload/2026/03/04/20260304083452-9e68343a.jpg",
-};
+export const currencyInfo = snapshot.currency;
+export const quickLinks = snapshot.quickLinks;
+export const categoryLinks = snapshot.categoryLinks;
 
-export const categories = [
-  {
-    name: "Shoes",
-    count: 684,
-    icon: ShoppingBag,
-    color: "#d94f35",
-    summary: "Runners, lifestyle pairs, performance silhouettes, and daily rotations.",
-    image: ogmulebuyImages.shoes,
-  },
-  {
-    name: "T-Shirts",
-    count: 512,
-    icon: Shirt,
-    color: "#0f8b8d",
-    summary: "Clean basics, seasonal graphics, oversized blanks, and seller batches.",
-    image: ogmulebuyImages.tshirts,
-  },
-  {
-    name: "Hoodies",
-    count: 438,
-    icon: Sparkles,
-    color: "#7a5c23",
-    summary: "Heavy fleece, zip hoodies, washed cotton, and winter layering.",
-    image: ogmulebuyImages.hoodies,
-  },
-  {
-    name: "Shorts",
-    count: 274,
-    icon: Tags,
-    color: "#6d6f12",
-    summary: "Mesh, nylon, cotton, and warm-weather essentials.",
-    image: ogmulebuyImages.shorts,
-  },
-  {
-    name: "Tracksuits",
-    count: 248,
-    icon: Boxes,
-    color: "#255c99",
-    summary: "Two-piece sets, casual warmups, and coordinated streetwear.",
-    image: ogmulebuyImages.tracksuits,
-  },
-  {
-    name: "Coats & Jackets",
-    count: 319,
-    icon: PackageCheck,
-    color: "#793f5c",
-    summary: "Puffers, technical shells, varsity cuts, and rain-ready layers.",
-    image: ogmulebuyImages.coats,
-  },
-  {
-    name: "Pants",
-    count: 371,
-    icon: Store,
-    color: "#47624f",
-    summary: "Denim, cargo pants, sweatpants, and everyday bottoms.",
-    image: ogmulebuyImages.pants,
-  },
-  {
-    name: "Jersey",
-    count: 166,
-    icon: Star,
-    color: "#b96a28",
-    summary: "Football shirts, fan kits, retro tops, and match-day finds.",
-    image: ogmulebuyImages.jersey,
-  },
-  {
-    name: "Electronics",
-    count: 92,
-    icon: Headphones,
-    color: "#53599a",
-    summary: "Small gadgets, desk gear, speakers, and practical add-ons.",
-    image: ogmulebuyImages.electronics,
-  },
-  {
-    name: "Accessories",
-    count: 224,
-    icon: Gem,
-    color: "#8a4b6e",
-    summary: "Bags, belts, caps, jewelry, wallets, and finishing touches.",
-    image: ogmulebuyImages.accessories,
-  },
-  {
-    name: "Perfumes",
-    count: 81,
-    icon: ScanSearch,
-    color: "#846c3d",
-    summary: "Fragrance listings and grooming add-ons that need extra QC attention.",
-    image: ogmulebuyImages.perfume,
-  },
-  {
-    name: "Women",
-    count: 155,
-    icon: BadgeCheck,
-    color: "#aa405f",
-    summary: "Dedicated womenswear spreadsheet lanes and styling-specific finds.",
-    image: ogmulebuyImages.women,
-  },
-];
+export const categories = snapshot.categories.map((category) => ({
+  ...category,
+  icon: categoryMeta[category.name]?.icon || Boxes,
+  color: categoryMeta[category.name]?.color || "#47624f",
+}));
 
-export const products = [
-  {
-    id: "MF-001",
-    slug: "daily-runner-rotation",
-    name: "Daily Runner Rotation",
-    category: "Shoes",
-    price: "From GH₵395",
-    seller: "Weidian sellers",
-    badge: "High demand",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.shoes,
-    gallery: [
-      ogmulebuyImages.shoes,
-      ogmulebuyImages.directLinks,
-      ogmulebuyImages.summerSale,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=Shoes",
-    summary: "A curated entry point for runner and lifestyle shoe listings with pricing context, seller source, and QC-ready browsing.",
-  },
-  {
-    id: "MF-002",
-    slug: "heavyweight-fleece-hoodies",
-    name: "Heavyweight Fleece Hoodies",
-    category: "Hoodies",
-    price: "From GH₵270",
-    seller: "Taobao stores",
-    badge: "Cold weather",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.hoodies,
-    gallery: [
-      ogmulebuyImages.hoodies,
-      ogmulebuyImages.sweaters,
-      ogmulebuyImages.coats,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=Hoodies",
-    summary: "Heavy fleece, zip hoodie, and winter-layer options grouped for quick comparison before placing a MuleBuy order.",
-  },
-  {
-    id: "MF-003",
-    slug: "clean-graphic-tee-pack",
-    name: "Clean Graphic Tee Pack",
-    category: "T-Shirts",
-    price: "From GH₵125",
-    seller: "1688 suppliers",
-    badge: "Budget pick",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.tshirts,
-    gallery: [
-      ogmulebuyImages.tshirts,
-      ogmulebuyImages.directLinks,
-      ogmulebuyImages.summerSale,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=T-Shirts",
-    summary: "A budget-friendly t-shirt lane for clean blanks, seasonal graphics, oversized cuts, and seller batch checks.",
-  },
-  {
-    id: "MF-004",
-    slug: "two-piece-tracksuit-finds",
-    name: "Two-Piece Tracksuit Finds",
-    category: "Tracksuits",
-    price: "From GH₵355",
-    seller: "Weidian sellers",
-    badge: "Set",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.tracksuits,
-    gallery: [
-      ogmulebuyImages.tracksuits,
-      ogmulebuyImages.hoodies,
-      ogmulebuyImages.sweaters,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=Tracksuits",
-    summary: "Coordinated tops and bottoms for shoppers who want set-based browsing with sizing and color checks in one place.",
-  },
-  {
-    id: "MF-005",
-    slug: "relaxed-cargo-denim-board",
-    name: "Relaxed Cargo & Denim Board",
-    category: "Pants",
-    price: "From GH₵205",
-    seller: "Taobao stores",
-    badge: "Everyday",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.pants,
-    gallery: [
-      ogmulebuyImages.pants,
-      ogmulebuyImages.shorts,
-      ogmulebuyImages.belts,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=Pants",
-    summary: "Cargo pants, relaxed denim, sweatpants, and everyday bottoms organized for fit checks and haul planning.",
-  },
-  {
-    id: "MF-006",
-    slug: "crossbody-travel-bags",
-    name: "Crossbody & Travel Bags",
-    category: "Accessories",
-    price: "From GH₵150",
-    seller: "1688 suppliers",
-    badge: "Utility",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.accessories,
-    gallery: [
-      ogmulebuyImages.accessories,
-      ogmulebuyImages.belts,
-      ogmulebuyImages.other,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=Accessories",
-    summary: "Crossbody, travel, and everyday bag listings with utility-focused details and image-led comparison.",
-  },
-  {
-    id: "MF-007",
-    slug: "mini-speaker-desk-gadgets",
-    name: "Mini Speaker & Desk Gadgets",
-    category: "Electronics",
-    price: "From GH₵230",
-    seller: "Taobao stores",
-    badge: "Useful",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.electronics,
-    gallery: [
-      ogmulebuyImages.electronics,
-      ogmulebuyImages.mobileSheet,
-      ogmulebuyImages.androidApp,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=Electronics",
-    summary: "Small electronics, mini speakers, and desk gadgets collected for practical add-ons and shipping-aware hauls.",
-  },
-  {
-    id: "MF-008",
-    slug: "football-jersey-directory",
-    name: "Football Jersey Directory",
-    category: "Jersey",
-    price: "From GH₵165",
-    seller: "Weidian sellers",
-    badge: "Fan favorite",
-    updated: "2026-06-30",
-    image: ogmulebuyImages.jersey,
-    gallery: [
-      ogmulebuyImages.jersey,
-      ogmulebuyImages.summerSale,
-      ogmulebuyImages.directLinks,
-    ],
-    sourceUrl: "https://ogmulebuy.com/products.html?cat=Jersey",
-    summary: "Football jersey lanes for fan kits, retro tops, and match-day finds with photo-first detail pages.",
-  },
-];
+export const products = snapshot.products;
 
-export const productPath = (product) => `/products/${product.slug}.html`;
+export const productPath = (product) => product.sourceUrl;
 
 export const workflow = [
   {
-    title: "Discover",
+    title: "Browse category",
     icon: ScanSearch,
-    body: "Start from categories instead of blank search. Jump into product groups, compare batches, and shortlist links.",
+    body: "Pick a MuleBuy category, then use the sheet shortcut or product rows to narrow the list.",
   },
   {
-    title: "Order",
+    title: "Open MuleBuy",
     icon: WalletCards,
-    body: "Paste Taobao, Weidian, 1688, or spreadsheet URLs into MuleBuy, then confirm size, color, quantity, and seller notes.",
+    body: "Each product row links directly to a MuleBuy product URL or a category spreadsheet shortcut.",
   },
   {
-    title: "Inspect",
+    title: "Check details",
     icon: Camera,
-    body: "Wait for warehouse arrival, review QC photos, and flag issues before committing to international shipping.",
+    body: "Confirm size, color, seller notes, and warehouse QC photos before shipping.",
   },
   {
-    title: "Ship",
+    title: "Ship parcel",
     icon: Truck,
-    body: "Consolidate parcels, compare shipping lines, calculate real weight, and track once final payment clears.",
+    body: "Consolidate items, estimate weight, choose a shipping line, and track the parcel.",
   },
-];
-
-export const agentRows = [
-  ["MuleBuy", "Spreadsheet-led browsing", "Strong category discovery and beginner-friendly ordering flow"],
-  ["Kakobuy", "Balanced daily use", "General-purpose agent workflows and broad product support"],
-  ["Oopbuy", "Quick product browsing", "Simple movement through item pages and link checks"],
-  ["ACBuy", "Spreadsheet users", "Alternative directory browsing with familiar ordering patterns"],
-  ["Hipobuy", "Category exploration", "Organized sections and product discovery for casual browsing"],
-  ["USFans", "Link-first shoppers", "Straightforward spreadsheet and product-link movement"],
 ];
 
 export const faqs = [
   {
-    q: "What is a MuleBuy spreadsheet?",
-    a: "It is a structured directory of MuleBuy-friendly product links, grouped by category so shoppers can browse faster than they would through scattered marketplace posts.",
+    q: "What is this spreadsheet?",
+    a: "It is a local MuleBuy spreadsheet snapshot built from OGMulebuy's public products page and config data, organized into categories with MuleBuy product links.",
   },
   {
-    q: "What are QC photos?",
-    a: "QC photos are warehouse inspection images. Review them before shipping so you can catch sizing, color, print, packaging, or condition issues early.",
+    q: "Why are prices in GH\u20b5?",
+    a: `This site displays Ghana cedi estimates using ${currencyInfo.source}.`,
   },
   {
-    q: "How much does shipping cost?",
-    a: "Shipping depends on destination, line, parcel weight, parcel volume, and service speed. Always estimate before building a large haul.",
+    q: "Where do product links open?",
+    a: "Product rows open MuleBuy product URLs or the relevant OGMulebuy category spreadsheet shortcut.",
   },
   {
-    q: "Are these official seller pages?",
-    a: "This is an independent directory experience. External links point to third-party resources, marketplaces, agents, or community pages, so users should verify each listing before buying.",
+    q: "Are these listings official?",
+    a: "This is an independent spreadsheet-style directory for MuleBuy browsing. Always verify product details, seller notes, and QC photos before buying.",
   },
 ];
 
 export const trustItems = [
-  { label: "Affiliate-ready links", icon: BadgeCheck },
+  { label: "MuleBuy-only rows", icon: BadgeCheck },
   { label: "CSV export", icon: Clock3 },
-  { label: "Mobile-first browsing", icon: Smartphone },
-  { label: "Warehouse QC flow", icon: Camera },
+  { label: "Category filters", icon: Smartphone },
+  { label: "QC-first workflow", icon: Camera },
 ];
