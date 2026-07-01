@@ -188,14 +188,18 @@ function App() {
             </div>
 
             <div className="result-actions">
-              <button className={favoritesOnly ? "utility-button active" : "utility-button"} type="button" onClick={() => setFavoritesOnly((value) => !value)}>
+              <button
+                className={favoritesOnly ? "utility-button favorites-filter active" : "utility-button favorites-filter"}
+                type="button"
+                onClick={() => setFavoritesOnly((value) => !value)}
+              >
                 <Heart size={17} fill={favoritesOnly ? "currentColor" : "none"} />
                 Favorites
               </button>
               <button className="icon-button" type="button" onClick={clearFilters} aria-label="Clear filters">
                 <SlidersHorizontal size={18} />
               </button>
-              <button className="utility-button" type="button" onClick={downloadCsv}>
+              <button className="utility-button csv-button" type="button" onClick={downloadCsv}>
                 <Download size={17} />
                 CSV
               </button>

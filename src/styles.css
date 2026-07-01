@@ -388,6 +388,16 @@ h1 {
   padding: 0 12px;
 }
 
+.favorites-filter,
+.csv-button {
+  white-space: nowrap;
+}
+
+.favorites-filter svg,
+.csv-button svg {
+  flex: 0 0 auto;
+}
+
 .utility-button.active {
   color: var(--red);
   border-color: rgba(217, 79, 53, 0.38);
@@ -687,6 +697,22 @@ footer {
   }
 
   .utility-button {
-    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .favorites-filter {
+    grid-column: 1;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .result-actions .icon-button {
+    grid-column: 2;
+  }
+
+  .csv-button {
+    grid-column: 3;
+    justify-content: center;
   }
 }
